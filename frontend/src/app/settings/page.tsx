@@ -1,7 +1,9 @@
 'use client';
 
-import Layout from '@/components/layout/Layout';
 import { useState } from 'react';
+import Layout from '@/components/layout/Layout';
+import SectionCard from '@/components/common/SectionCard';
+import ActionButton from '@/components/common/ActionButton';
 import Link from 'next/link';
 
 export default function SettingsPage() {
@@ -11,113 +13,105 @@ export default function SettingsPage() {
   const [twoFactor, setTwoFactor] = useState(false);
 
   const handleSave = () => {
-    alert('✅ Settings saved successfully!');
+    alert('Settings saved successfully!');
   };
 
   return (
     <Layout title="Settings">
-      <div className="max-w-3xl mx-auto space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 mb-2">
-            Settings
-          </h1>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            Customize your app experience and privacy preferences.
-          </p>
-        </div>
-
-        {/* Preferences Section */}
-        <section className="rounded-2xl bg-white dark:bg-zinc-900 p-6 shadow-lg border border-zinc-100 dark:border-zinc-800">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50 mb-4">
-            Preferences
-          </h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Enable Dark Mode
-              </span>
+      <div className="mx-auto max-w-4xl space-y-8">
+        <SectionCard
+          title="Theme & preferences"
+          description="Choose how Learnify looks and when you want reminders."
+        >
+          <div className="space-y-5">
+            <label className="flex items-center justify-between rounded-2xl border border-zinc-100 px-4 py-3 dark:border-zinc-800">
+              <div>
+                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Dark mode</p>
+                <p className="text-xs text-zinc-500">Syncs with the global appearance toggle.</p>
+              </div>
               <input
                 type="checkbox"
                 checked={darkMode}
-                onChange={() => setDarkMode(!darkMode)}
-                className="w-5 h-5 accent-indigo-600"
+                onChange={() => setDarkMode((prev) => !prev)}
+                className="h-5 w-5 accent-indigo-600"
               />
-            </div>
+            </label>
 
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Enable Notifications
-              </span>
+            <label className="flex items-center justify-between rounded-2xl border border-zinc-100 px-4 py-3 dark:border-zinc-800">
+              <div>
+                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                  Notifications
+                </p>
+                <p className="text-xs text-zinc-500">
+                  Lesson reminders, flashcard nudges, and progress emails.
+                </p>
+              </div>
               <input
                 type="checkbox"
                 checked={notifications}
-                onChange={() => setNotifications(!notifications)}
-                className="w-5 h-5 accent-indigo-600"
+                onChange={() => setNotifications((prev) => !prev)}
+                className="h-5 w-5 accent-indigo-600"
               />
-            </div>
+            </label>
 
             <div>
               <label
                 htmlFor="language"
-                className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1"
+                className="text-sm font-semibold text-zinc-900 dark:text-zinc-50"
               >
                 Language
               </label>
               <select
                 id="language"
                 value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={(event) => setLanguage(event.target.value)}
+                className="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
               >
                 <option value="en">English</option>
-                <option value="ar">العربية</option>
+                <option value="ar">Arabic</option>
               </select>
             </div>
           </div>
-        </section>
+        </SectionCard>
 
-        {/* Security Section */}
-        <section className="rounded-2xl bg-white dark:bg-zinc-900 p-6 shadow-lg border border-zinc-100 dark:border-zinc-800">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50 mb-4">Security</h2>
-
+        <SectionCard
+          title="Security"
+          description="Protect your workspace with multi-factor auth and password updates."
+        >
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Two-Factor Authentication
-              </span>
+            <label className="flex items-center justify-between rounded-2xl border border-zinc-100 px-4 py-3 dark:border-zinc-800">
+              <div>
+                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                  Two-factor authentication
+                </p>
+                <p className="text-xs text-zinc-500">Add an extra code when signing in.</p>
+              </div>
               <input
                 type="checkbox"
                 checked={twoFactor}
-                onChange={() => setTwoFactor(!twoFactor)}
-                className="w-5 h-5 accent-indigo-600"
+                onChange={() => setTwoFactor((prev) => !prev)}
+                className="h-5 w-5 accent-indigo-600"
               />
-            </div>
+            </label>
 
             <Link
               href="/settings/change-password"
-              className="block text-center w-full rounded-lg border border-zinc-300 dark:border-zinc-700 py-2 text-sm font-medium text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+              className="block w-full rounded-2xl border border-zinc-200 px-4 py-3 text-center text-sm font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800"
             >
-              Change Password
+              Change password
             </Link>
 
             <button
-              onClick={() => alert('⚠️ Account deletion feature coming soon')}
-              className="w-full rounded-lg border border-red-400 text-red-600 py-2 text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+              onClick={() => alert('Account deletion coming soon.')}
+              className="w-full rounded-2xl border border-red-300 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/30"
             >
-              Delete Account
+              Delete account
             </button>
           </div>
-        </section>
+        </SectionCard>
 
-        {/* Save Button */}
         <div className="flex justify-end">
-          <button
-            onClick={handleSave}
-            className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium shadow hover:opacity-90 transition focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-          >
-            Save Changes
-          </button>
+          <ActionButton onClick={handleSave}>Save changes</ActionButton>
         </div>
       </div>
     </Layout>

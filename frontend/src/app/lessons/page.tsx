@@ -1,74 +1,98 @@
 'use client';
 
-import Layout from '@/components/layout/Layout';
 import { useState } from 'react';
-import Link from 'next/link';
+import Layout from '@/components/layout/Layout';
+import SectionCard from '@/components/common/SectionCard';
+import ActionButton from '@/components/common/ActionButton';
+import LessonCard from '@/components/common/LessonCard';
+import EmptyState from '@/components/common/EmptyState';
 
 export default function LessonsPage() {
   const [isDragging, setIsDragging] = useState(false);
 
   const uploadedLessons = [
-    { id: 1, fileName: 'Biology - Chapter 3.pdf', uploadDate: 'March 15, 2024' },
-    { id: 2, fileName: 'History - World War II.docx', uploadDate: 'March 14, 2024' },
-    { id: 3, fileName: 'Mathematics - Calculus Notes.pdf', uploadDate: 'March 12, 2024' },
-    { id: 4, fileName: 'Chemistry - Organic Compounds.txt', uploadDate: 'March 10, 2024' },
+    {
+      id: 1,
+      title: 'Biology - Chapter 3',
+      description: 'Light-dependent reactions, chlorophyll, and ATP synthesis.',
+      uploadDate: 'March 15, 2024',
+    },
+    {
+      id: 2,
+      title: 'History - World War II',
+      description: 'Causes of the war, key battles, and post-war reconstruction.',
+      uploadDate: 'March 14, 2024',
+    },
+    {
+      id: 3,
+      title: 'Mathematics - Calculus Notes',
+      description: 'Chain rule, derivatives, and optimization problems.',
+      uploadDate: 'March 12, 2024',
+    },
+    {
+      id: 4,
+      title: 'Chemistry - Organic Compounds',
+      description: 'Functional groups, reactions, and laboratory notes.',
+      uploadDate: 'March 10, 2024',
+    },
   ];
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
     setIsDragging(true);
   };
 
   const handleDragLeave = () => setIsDragging(false);
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
     setIsDragging(false);
-    // TODO: Handle file upload
   };
 
   const handleFileSelect = () => {
-    // TODO: Handle manual file selection
+    // TODO: upload logic
   };
 
   return (
     <Layout title="My Lessons">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          My Lessons
-        </h1>
-        <button className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-medium shadow hover:opacity-90 transition focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-          + Upload New Lesson
-        </button>
-      </div>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-8">
-        Upload your study materials and let AI help you learn faster.
-      </p>
+      <div className="space-y-10">
+        <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              My Lessons
+            </h1>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              Upload your study materials and let Learnify summarize, quiz, and chat through them.
+            </p>
+          </div>
+          <ActionButton onClick={() => alert('Upload flow coming soon!')}>
+            + Upload Lesson
+          </ActionButton>
+        </header>
 
-      {/* Upload Section */}
-      <section className="rounded-2xl bg-white dark:bg-zinc-900 p-8 shadow-lg border border-zinc-100 dark:border-zinc-800 mb-10">
-        <div
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className={`relative border-2 border-dashed rounded-xl p-12 text-center transition ${
-            isDragging
-              ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/20'
-              : 'border-zinc-300 dark:border-zinc-700 hover:border-indigo-400 dark:hover:border-indigo-600'
-          }`}
+        <SectionCard
+          title="Upload new lesson"
+          description="Drop files into the zone or browse to import from your computer. PDF, DOCX, or TXT supported."
         >
-          <input
-            type="file"
-            id="file-upload"
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            accept=".pdf,.docx,.txt"
-            onChange={handleFileSelect}
-            aria-label="Upload file"
-          />
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed px-8 py-14 text-center transition ${
+              isDragging
+                ? 'border-indigo-500 bg-indigo-50 dark:border-indigo-300 dark:bg-indigo-950/30'
+                : 'border-zinc-300 dark:border-zinc-700 hover:border-indigo-400 dark:hover:border-indigo-500'
+            }`}
+          >
+            <input
+              type="file"
+              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              accept=".pdf,.docx,.txt"
+              onChange={handleFileSelect}
+              aria-label="Upload a lesson"
+            />
 
-          <div className="mb-4 flex justify-center">
             <svg
-              className="w-16 h-16 text-zinc-400 dark:text-zinc-600"
+              className="mb-6 h-16 w-16 text-indigo-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -77,81 +101,67 @@ export default function LessonsPage() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={1.5}
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                d="M3 15a4 4 0 01.88-7.903 5 5 0 119.097-1.664A4 4 0 1115 15m-3-3l-3 3m3-3l3 3m-3-3v9"
               />
             </svg>
+            <p className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+              Drop your lesson here
+            </p>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              or click to browse from your device
+            </p>
           </div>
+        </SectionCard>
 
-          <p className="text-lg font-medium text-zinc-900 dark:text-zinc-50 mb-2">
-            Drop your study material here or click to upload
-          </p>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            PDF, DOCX, or TXT files supported
-          </p>
-        </div>
-      </section>
-
-      {/* Lessons Grid */}
-      <section>
-        <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50 mb-4">
-          Uploaded Lessons
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {uploadedLessons.map((lesson) => (
-            <div
-              key={lesson.id}
-              className="rounded-2xl bg-white dark:bg-zinc-900 p-6 shadow-lg border border-zinc-100 dark:border-zinc-800 hover:shadow-xl transition"
-            >
-              <div className="mb-4">
-                <svg
-                  className="w-10 h-10 text-indigo-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-              </div>
-
-              <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-50 mb-1 line-clamp-2">
-                {lesson.fileName}
-              </h3>
-              <p className="text-xs text-zinc-500 dark:text-zinc-500 mb-4">{lesson.uploadDate}</p>
-
-              <div className="space-y-2">
-                <Link
-                  href={`/lessons/${lesson.id}`}
-                  className="block w-full rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 py-2 text-sm font-medium text-white shadow hover:opacity-90 transition"
-                >
-                  View Details
-                </Link>
-                <div className="grid grid-cols-3 gap-2">
-                  <button className="rounded-lg border border-zinc-300 dark:border-zinc-700 py-2 text-xs font-medium text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition">
-                    Summarize
-                  </button>
-                  <Link
-                    href={`/flashcards/${lesson.id}`}
-                    className="rounded-lg border border-zinc-300 dark:border-zinc-700 py-2 text-xs font-medium text-center text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
-                  >
-                    Flashcards
-                  </Link>
-                  <Link
-                    href={`/chat/${lesson.id}`}
-                    className="rounded-lg border border-zinc-300 dark:border-zinc-700 py-2 text-xs font-medium text-center text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
-                  >
-                    Ask AI
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+        {uploadedLessons.length > 0 ? (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {uploadedLessons.map((lesson) => (
+              <LessonCard
+                key={lesson.id}
+                title={lesson.title}
+                description={lesson.description}
+                meta={`Uploaded ${lesson.uploadDate}`}
+                actions={
+                  <>
+                    <ActionButton
+                      href={{
+                        pathname: `/lessons/${lesson.id}`,
+                      }}
+                      fullWidth
+                    >
+                      View Lesson
+                    </ActionButton>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button className="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800">
+                        Summaries
+                      </button>
+                      <button className="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800">
+                        Download
+                      </button>
+                      <button className="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800">
+                        Share
+                      </button>
+                    </div>
+                  </>
+                }
+                footer={
+                  <div className="flex justify-between">
+                    <span>Flashcards ready</span>
+                    <span className="text-indigo-500">AI chat enabled</span>
+                  </div>
+                }
+              />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="No lessons uploaded yet"
+            message="Once you upload a lesson, Learnify will summarize it, build flashcards, and unlock AI chat."
+            actionLabel="Upload your first lesson"
+            onAction={() => alert('Upload flow coming soon!')}
+          />
+        )}
+      </div>
     </Layout>
   );
 }

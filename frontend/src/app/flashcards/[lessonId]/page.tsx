@@ -1,9 +1,11 @@
 'use client';
 
-import Layout from '@/components/layout/Layout';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
-import Link from 'next/link';
+import Layout from '@/components/layout/Layout';
+import SectionCard from '@/components/common/SectionCard';
+import ActionButton from '@/components/common/ActionButton';
+import EmptyState from '@/components/common/EmptyState';
 
 interface Flashcard {
   id: number;
@@ -16,27 +18,27 @@ export default function LessonFlashcardsPage() {
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
-  // Dummy flashcards for the lesson
   const flashcards: Flashcard[] = [
     {
       id: 1,
       question: 'Define photosynthesis.',
-      answer:
-        'The process by which green plants use sunlight to synthesize foods from CO₂ and water.',
+      answer: 'A process where plants convert sunlight, water, and CO2 into glucose and oxygen.',
     },
     {
       id: 2,
       question: 'What is chlorophyll?',
-      answer: 'A green pigment found in plants that absorbs light energy for photosynthesis.',
+      answer: 'The green pigment in chloroplasts that absorbs light energy for photosynthesis.',
     },
     {
       id: 3,
       question: 'What are stomata?',
-      answer: 'Tiny pores on plant leaves that allow gas exchange.',
+      answer: 'Tiny pores on leaves that regulate gas exchange and water vapor.',
     },
   ];
 
-  const handleFlip = () => setFlipped(!flipped);
+  const hasFlashcards = flashcards.length > 0;
+
+  const handleFlip = () => setFlipped((prev) => !prev);
   const nextCard = () => {
     setFlipped(false);
     setCurrent((prev) => (prev + 1) % flashcards.length);
@@ -46,65 +48,60 @@ export default function LessonFlashcardsPage() {
     setCurrent((prev) => (prev === 0 ? flashcards.length - 1 : prev - 1));
   };
 
+  if (!hasFlashcards) {
+    return (
+      <Layout title="Flashcards">
+        <EmptyState
+          title="No flashcards yet"
+          message="Generate flashcards for this lesson to start practicing key concepts."
+          actionLabel="Generate flashcards"
+          onAction={() => alert('Generating flashcards...')}
+        />
+      </Layout>
+    );
+  }
+
   return (
-    <Layout title={`Flashcards – Lesson ${lessonId}`}>
-      <main className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-lg p-8">
-        <div className="w-full max-w-lg mb-8">
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">
-            Lesson {lessonId} Flashcards
-          </h1>
-          <Link
-            href="/flashcards"
-            className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
-          >
-            ← Back to all flashcards
-          </Link>
-        </div>
-
-        <div
-          onClick={handleFlip}
-          className="w-full max-w-lg h-64 flex items-center justify-center rounded-2xl cursor-pointer transition-transform duration-500 relative"
+    <Layout title="Flashcards">
+      <div className="space-y-8">
+        <SectionCard
+          title={`Lesson ${lessonId}`}
+          description="Flip through each card to test yourself. Learnify tracks progress across sessions."
         >
-          {/* Front */}
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+            Deck size: {flashcards.length} cards - Currently viewing card {current + 1}
+          </p>
+        </SectionCard>
+
+        <SectionCard contentClassName="flex flex-col items-center gap-8">
           <div
-            className={`absolute w-full h-full flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-lg font-medium ${
-              flipped ? 'hidden' : ''
+            onClick={handleFlip}
+            className={`flex h-72 w-full max-w-xl cursor-pointer items-center justify-center rounded-2xl border text-center text-lg font-semibold shadow-xl transition-all duration-500 ${
+              flipped
+                ? 'border-zinc-100 bg-white text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100'
+                : 'border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 text-white'
             }`}
           >
-            {flashcards[current].question}
+            <p className="px-10">
+              {flipped ? flashcards[current].answer : flashcards[current].question}
+            </p>
           </div>
 
-          {/* Back */}
-          <div
-            className={`absolute w-full h-full flex items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-lg font-medium ${
-              flipped ? '' : 'hidden'
-            }`}
-          >
-            {flashcards[current].answer}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={prevCard}
+              className="rounded-xl border border-zinc-200 px-5 py-2 text-sm font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800"
+            >
+              Previous
+            </button>
+            <ActionButton onClick={nextCard}>Next card</ActionButton>
           </div>
-        </div>
 
-        {/* Controls */}
-        <div className="flex items-center justify-center gap-4 mt-10">
-          <button
-            onClick={prevCard}
-            className="px-4 py-2 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition"
-          >
-            ← Previous
-          </button>
-
-          <button
-            onClick={nextCard}
-            className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium shadow hover:opacity-90 transition"
-          >
-            Next →
-          </button>
-        </div>
-
-        <p className="mt-6 text-sm text-zinc-500 dark:text-zinc-400">
-          Card {current + 1} of {flashcards.length}
-        </p>
-      </main>
+          <p className="text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-500">
+            Card {current + 1} of {flashcards.length}
+          </p>
+        </SectionCard>
+      </div>
     </Layout>
   );
 }

@@ -1,157 +1,206 @@
 'use client';
 
-import type React from 'react';
-
-import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Moon, Sun } from 'lucide-react';
 
 interface LayoutProps {
+  title: string;
   children: React.ReactNode;
-  title?: string;
 }
 
-export default function Layout({ children, title }: LayoutProps) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+export default function Layout({ title, children }: LayoutProps) {
   const pathname = usePathname();
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const navItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: '📊' },
-    { name: 'My Lessons', href: '/lessons', icon: '📚' },
-    { name: 'Flashcards', href: '/flashcards', icon: '🎴' },
-    { name: 'AI Chat', href: '/chat', icon: '💬' },
-    { name: 'Profile', href: '/profile', icon: '👤' },
-    { name: 'Settings', href: '/settings', icon: '⚙️' },
-  ];
-
-  const isActive = (href: string) => {
-    if (href === '/dashboard') return pathname === href;
-    return pathname.startsWith(href);
+  const user = {
+    name: 'Ziad Morjan',
+    image: '',
   };
 
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+
+  const pathSegments = pathname.split('/').filter(Boolean);
+
+  const lessonNames: Record<string, string> = {
+    '1': 'Biology - Chapter 3',
+    '2': 'History - World War II',
+    '3': 'Mathematics - Calculus Notes',
+    '4': 'Chemistry - Organic Compounds',
+  };
+
+  const breadcrumbs = pathSegments.map((segment, index) => {
+    const href = '/' + pathSegments.slice(0, index + 1).join('/');
+    const isLast = index === pathSegments.length - 1;
+    const displayName =
+      lessonNames[segment] || segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+
+    return isLast ? (
+      <span key={href} className="font-medium text-indigo-600 dark:text-indigo-400">
+        {displayName}
+      </span>
+    ) : (
+      <Link
+        key={href}
+        href={{ pathname: href }}
+        className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-500 transition"
+      >
+        {displayName}
+      </Link>
+    );
+  });
+
+  const navItems = [
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'My Lessons', href: '/lessons' },
+    { name: 'Flashcards', href: '/flashcards' },
+    { name: 'AI Chat', href: '/chat' },
+    { name: 'Profile', href: '/profile' },
+    { name: 'Settings', href: '/settings' },
+  ];
+
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black">
-      {/* Mobile sidebar overlay */}
+    <div className="flex min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-50">
+      {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
-          aria-hidden="true"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden animate-fadeIn"
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 z-50 transform transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 z-50 transform transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        } lg:translate-x-0`}
       >
-        <div className="p-6">
-          <Link href="/dashboard">
-            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition">
-              Learnify
-            </h2>
-          </Link>
+        <div className="p-6 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-indigo-600">Learnify</h1>
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="lg:hidden p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+            aria-label="Close sidebar"
+          >
+            <svg
+              className="w-5 h-5 text-zinc-700 dark:text-zinc-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
 
         <nav className="px-4 space-y-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              onClick={() => setIsSidebarOpen(false)}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition ${
-                isActive(item.href)
-                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md'
-                  : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
-              }`}
-            >
-              <span className="text-lg">{item.icon}</span>
-              {item.name}
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            const isActive = pathname.startsWith(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={{ pathname: item.href }}
+                onClick={() => setIsSidebarOpen(false)}
+                className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition ${
+                  isActive
+                    ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white'
+                    : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+                }`}
+              >
+                {item.name}
+              </Link>
+            );
+          })}
         </nav>
-
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-zinc-200 dark:border-zinc-800">
-          <button
-            className="w-full px-4 py-2.5 rounded-lg text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-            aria-label="Logout"
-          >
-            Logout
-          </button>
-        </div>
       </aside>
 
-      {/* Main content */}
-      <div className="lg:ml-64">
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col lg:ml-64 transition-all duration-300">
         {/* Topbar */}
-        <header className="sticky top-0 z-30 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-4 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              {/* Mobile menu button */}
-              <button
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="lg:hidden p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                aria-label="Toggle sidebar"
+        <header className="sticky top-0 z-30 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* Mobile sidebar toggle */}
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+              aria-label="Open sidebar"
+            >
+              <svg
+                className="w-6 h-6 text-zinc-700 dark:text-zinc-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <svg
-                  className="w-6 h-6 text-zinc-700 dark:text-zinc-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
 
-              <div>
-                <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-                  {title || 'Learnify Dashboard'}
-                </h1>
+            <div>
+              <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
+              <nav className="text-sm mt-1 text-zinc-500 dark:text-zinc-400 flex flex-wrap items-center gap-1">
+                <Link href={{ pathname: '/dashboard' }} className="hover:text-indigo-500 transition">
+                  Home
+                </Link>
+                {breadcrumbs.length > 0 && <span className="mx-1 text-zinc-400">/</span>}
+                {breadcrumbs.map((crumb, index) => (
+                  <span key={index} className="flex items-center gap-1">
+                    {crumb}
+                    {index < breadcrumbs.length - 1 && (
+                      <span className="mx-1 text-zinc-400">/</span>
+                    )}
+                  </span>
+                ))}
+              </nav>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+              aria-label="Toggle theme"
+            >
+              {theme === 'light' ? (
+                <Moon className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+              ) : (
+                <Sun className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+              )}
+            </button>
+
+            {user.image ? (
+              <img
+                src={user.image}
+                alt={user.name}
+                className="w-9 h-9 rounded-full border border-zinc-300 dark:border-zinc-700 object-cover"
+              />
+            ) : (
+              <div className="w-9 h-9 flex items-center justify-center rounded-full bg-indigo-600 text-white font-semibold">
+                {user.name.charAt(0).toUpperCase()}
               </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              {/* Light/Dark mode toggle */}
-              <button
-                className="p-2 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                aria-label="Toggle theme"
-              >
-                <svg
-                  className="w-5 h-5 text-zinc-700 dark:text-zinc-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                  />
-                </svg>
-              </button>
-
-              {/* User avatar */}
-              <Link
-                href="/profile"
-                className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm shadow-md hover:opacity-90 transition focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                aria-label="User profile"
-              >
-                Z
-              </Link>
-            </div>
+            )}
           </div>
         </header>
 
-        {/* Main content area */}
-        <main className="p-4 lg:p-8">{children}</main>
-      </div>
+        {/* Page Content */}
+        <div className="flex-1 p-6 lg:p-10 animate-fadeIn">{children}</div>
+      </main>
     </div>
   );
 }

@@ -1,111 +1,122 @@
 'use client';
 
-import Layout from '@/components/layout/Layout';
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import Layout from '@/components/layout/Layout';
+import SectionCard from '@/components/common/SectionCard';
+import ActionButton from '@/components/common/ActionButton';
+import { BookOpenCheck, Download, MessageCircle, PanelsTopLeft } from 'lucide-react';
 
 export default function LessonDetailsPage() {
   const { lessonId } = useParams();
   const [summaryVisible, setSummaryVisible] = useState(false);
 
-  // Mock data (لاحقًا تستبدل ببيانات فعلية من الـ backend)
   const lesson = {
     id: lessonId,
-    title: 'Biology – Photosynthesis',
+    title: 'Biology - Photosynthesis',
     uploadDate: 'October 20, 2025',
     fileType: 'PDF',
     fileSize: '2.4 MB',
     description:
-      'An overview of the photosynthesis process, including light-dependent reactions, chlorophyll function, and energy conversion.',
+      'An overview of the photosynthesis process, including light-dependent reactions, chlorophyll function, and energy conversion steps.',
     aiSummary:
-      'Photosynthesis is a process by which green plants convert light energy into chemical energy stored in glucose. It occurs mainly in chloroplasts, involving two major phases: light reactions and the Calvin cycle.',
+      'Photosynthesis converts light energy into glucose. Light reactions capture photons inside chloroplast thylakoids, creating ATP and NADPH. The Calvin cycle uses those molecules to fix CO2 into sugars while regenerating RuBP.',
   };
 
   return (
-    <Layout title={`Lesson Details – ${lesson.title}`}>
-      <main className="max-w-5xl mx-auto py-10 px-6">
-        {/* Header */}
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">
-              {lesson.title}
-            </h1>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              Uploaded on {lesson.uploadDate} · {lesson.fileType} · {lesson.fileSize}
-            </p>
-          </div>
+    <Layout title={`Lesson - ${lesson.title}`}>
+      <div className="mx-auto max-w-5xl space-y-8">
+        <SectionCard
+          title={lesson.title}
+          description="All lesson metadata, uploads, and AI-generated insights stay synced across Learnify."
+        >
+          <p className="text-sm text-zinc-600 dark:text-zinc-300">{lesson.description}</p>
 
-          <Link
-            href="/lessons"
-            className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
-          >
-            ← Back to My Lessons
-          </Link>
-        </div>
+          <dl className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-zinc-100 p-4 dark:border-zinc-800">
+              <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                Uploaded
+              </dt>
+              <dd className="mt-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
+                {lesson.uploadDate}
+              </dd>
+            </div>
+            <div className="rounded-xl border border-zinc-100 p-4 dark:border-zinc-800">
+              <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                File details
+              </dt>
+              <dd className="mt-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
+                {lesson.fileType} - {lesson.fileSize}
+              </dd>
+            </div>
+          </dl>
+        </SectionCard>
 
-        {/* Description */}
-        <div className="rounded-2xl bg-white dark:bg-zinc-900 p-6 shadow-lg border border-zinc-100 dark:border-zinc-800 mb-8">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50 mb-2">
-            Lesson Overview
-          </h2>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            {lesson.description}
-          </p>
-        </div>
-
-        {/* AI Summary */}
-        <div className="rounded-2xl bg-white dark:bg-zinc-900 p-6 shadow-lg border border-zinc-100 dark:border-zinc-800 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">AI Summary</h2>
-            <button
-              onClick={() => setSummaryVisible(!summaryVisible)}
-              className="text-sm px-4 py-1.5 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium shadow hover:opacity-90 transition"
-            >
-              {summaryVisible ? 'Hide Summary' : 'Generate Summary'}
-            </button>
-          </div>
-
+        <SectionCard
+          title="AI Summary"
+          description="Summaries update automatically each time you re-upload or regenerate."
+          actions={
+            <ActionButton onClick={() => setSummaryVisible((prev) => !prev)}>
+              {summaryVisible ? 'Hide summary' : 'Generate summary'}
+            </ActionButton>
+          }
+        >
           {summaryVisible ? (
-            <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+            <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
               {lesson.aiSummary}
             </p>
           ) : (
-            <p className="text-sm text-zinc-500 italic dark:text-zinc-500">
-              Click "Generate Summary" to view AI insights for this lesson.
+            <p className="text-sm italic text-zinc-500 dark:text-zinc-500">
+              Tap "Generate summary" to see Learnify&apos;s latest takeaways for this lesson.
             </p>
           )}
-        </div>
+        </SectionCard>
 
-        {/* Actions */}
-        <section className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <Link
-            href={`/chat/${lesson.id}`}
-            className="rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white shadow-lg hover:opacity-90 transition text-center"
+        <SectionCard
+          title="Continue learning"
+          description="Jump back into flashcards, AI chat, or download the original file."
+          contentClassName="grid gap-4 md:grid-cols-3"
+        >
+          <ActionButton
+            href={{
+              pathname: `/chat/${lesson.id}`,
+            }}
+            layout="tile"
+            icon={<MessageCircle className="h-5 w-5" />}
           >
-            <h3 className="text-lg font-semibold mb-2">Ask AI</h3>
-            <p className="text-sm opacity-80">Chat with AI about this lesson’s content.</p>
-          </Link>
+            Ask AI
+          </ActionButton>
+          <ActionButton
+            href={{
+              pathname: `/flashcards/${lesson.id}`,
+            }}
+            layout="tile"
+            icon={<BookOpenCheck className="h-5 w-5" />}
+          >
+            Flashcards
+          </ActionButton>
+          <ActionButton
+            onClick={() => alert('Download started!')}
+            layout="tile"
+            icon={<Download className="h-5 w-5" />}
+          >
+            Download
+          </ActionButton>
+        </SectionCard>
 
-          <Link
-            href={`/flashcards/${lesson.id}`}
-            className="rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white shadow-lg hover:opacity-90 transition text-center"
-          >
-            <h3 className="text-lg font-semibold mb-2">Flashcards</h3>
-            <p className="text-sm opacity-80">
-              Review interactive flashcards generated from this lesson.
-            </p>
-          </Link>
-
-          <button
-            onClick={() => alert('📄 Download started!')}
-            className="rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 p-6 text-white shadow-lg hover:opacity-90 transition text-center"
-          >
-            <h3 className="text-lg font-semibold mb-2">Download File</h3>
-            <p className="text-sm opacity-80">Get your uploaded lesson file.</p>
-          </button>
-        </section>
-      </main>
+        <SectionCard
+          title="Lesson tools"
+          description="Enhance this lesson with AI suggestions, outlines, and quick actions."
+        >
+          <div className="flex flex-wrap gap-3">
+            <ActionButton layout="inline" icon={<PanelsTopLeft className="h-4 w-4" />}>
+              Outline builder
+            </ActionButton>
+            <ActionButton layout="inline">Quiz me</ActionButton>
+            <ActionButton layout="inline">Share with peers</ActionButton>
+          </div>
+        </SectionCard>
+      </div>
     </Layout>
   );
 }

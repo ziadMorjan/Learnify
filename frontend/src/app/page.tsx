@@ -20,7 +20,7 @@ export default function LandingPage() {
       <div className="max-w-3xl">
         <h1 className="text-5xl font-bold text-zinc-900 dark:text-zinc-50 mb-6 leading-tight">
           Welcome to{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700">
             Learnify
           </span>
         </h1>
@@ -32,7 +32,7 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/login"
-            className="w-40 text-center rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 font-medium shadow hover:opacity-90 transition"
+            className="w-40 text-center rounded-lg bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white py-3 font-medium shadow hover:opacity-90 transition"
           >
             Login
           </Link>

@@ -1,82 +1,53 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
+import Input from '@/components/common/Input';
+import ErrorMessage from '@/components/common/ErrorMessage';
+import ActionButton from '@/components/common/ActionButton';
+import AuthShell from '@/components/common/AuthShell';
 
 export default function LoginPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setError('Invalid email or password');
+    }, 1500);
+  };
+
   return (
-    <main className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-black px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white dark:bg-zinc-900 p-8 shadow-lg border border-zinc-100 dark:border-zinc-800">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 mb-2">
-            Welcome back to Learnify
-          </h1>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            Sign in to continue your learning journey
-          </p>
-        </div>
-
-        <form className="space-y-5">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="user@example.com"
-              aria-label="Email address"
-              className="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              aria-label="Password"
-              className="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 py-2.5 text-white font-medium shadow hover:opacity-90 transition focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-          >
-            Sign in
-          </button>
-
-          <div className="text-center">
-            <Link
-              href="/forgot-password"
-              className="text-sm text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 underline"
-            >
-              Forgot your password?
-            </Link>
-          </div>
-        </form>
-
-        <div className="mt-8 text-center">
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            Don&apos;t have an account?{' '}
-            <Link
-              href="/register"
-              className="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 underline font-medium"
-            >
-              Sign up
-            </Link>
-          </p>
-        </div>
-      </div>
-    </main>
+    <AuthShell
+      title="Welcome back to Learnify"
+      description="Sign in to continue your learning journey."
+      linkSlot={
+        <Link href="/forgot-password" className="font-semibold">
+          Forgot password?
+        </Link>
+      }
+      footer={
+        <>
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="font-semibold text-indigo-600 dark:text-indigo-400">
+            Sign up
+          </Link>
+        </>
+      }
+    >
+      <form className="space-y-5" onSubmit={handleSubmit}>
+        <Input label="Email" type="email" placeholder="user@example.com" required />
+        <Input label="Password" type="password" placeholder="********" required />
+        {error && <ErrorMessage message={error} />}
+        <ActionButton type="submit" fullWidth disabled={isLoading}>
+          {isLoading ? 'Signing in...' : 'Sign in'}
+        </ActionButton>
+      </form>
+    </AuthShell>
   );
 }
