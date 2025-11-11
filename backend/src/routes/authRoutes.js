@@ -1,19 +1,19 @@
 import express from 'express';
 import {
-    registerUser,
-    loginUser,
-    getMe,
-    forgotPassword,
-    resetPassword,
-    logoutUser,
+  registerUser,
+  loginUser,
+  getMe,
+  forgotPassword,
+  resetPassword,
+  logoutUser,
 } from '../controllers/authController.js';
 import { protect } from '../middlewares/authMiddleware.js';
 import { validateRequest } from '../middlewares/validateRequest.js';
 import {
-    registerValidator,
-    loginValidator,
-    forgotPasswordValidator,
-    resetPasswordValidator,
+  registerValidator,
+  loginValidator,
+  forgotPasswordValidator,
+  resetPasswordValidator,
 } from '../utils/validators/authValidator.js';
 
 const router = express.Router();

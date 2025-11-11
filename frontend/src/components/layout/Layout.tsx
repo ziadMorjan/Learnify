@@ -159,9 +159,7 @@ export default function Layout({ title, children }: LayoutProps) {
             <div>
               <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
               <nav className="text-sm mt-1 text-zinc-500 dark:text-zinc-400 flex flex-wrap items-center gap-1">
-                <Link href={{ pathname: '/dashboard' }}>
-                  Home
-                </Link>
+                <Link href={{ pathname: '/dashboard' }}>Home</Link>
                 {breadcrumbs.length > 0 && <span className="mx-1 text-zinc-400">/</span>}
                 {breadcrumbs.map((crumb, index) => (
                   <span key={index} className="flex items-center gap-1">
@@ -184,11 +182,7 @@ export default function Layout({ title, children }: LayoutProps) {
               aria-pressed={theme === 'dark'}
             >
               <span className="sr-only">Switch color theme</span>
-              {theme === 'light' ? (
-                <Moon className="h-5 w-5" />
-              ) : (
-                <Sun className="h-5 w-5" />
-              )}
+              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </button>
 
             {user.image ? (

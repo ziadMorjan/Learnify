@@ -30,7 +30,7 @@ const layoutStyles: Record<NonNullable<BaseProps['layout']>, string> = {
 const renderContent = (
   icon: React.ReactNode,
   layout: NonNullable<BaseProps['layout']>,
-  children: React.ReactNode,
+  children: React.ReactNode
 ) => (
   <>
     {icon && <span className="text-lg">{icon}</span>}
@@ -40,7 +40,15 @@ const renderContent = (
 
 export default function ActionButton(props: ActionButtonProps) {
   if ('href' in props && props.href) {
-    const { href, className, fullWidth, icon, layout = 'inline', children, ...linkProps } = props as LinkLikeProps;
+    const {
+      href,
+      className,
+      fullWidth,
+      icon,
+      layout = 'inline',
+      children,
+      ...linkProps
+    } = props as LinkLikeProps;
     const classes = cn(baseStyles, layoutStyles[layout], fullWidth && 'w-full', className);
     return (
       <Link href={href} {...linkProps} className={classes}>
@@ -49,7 +57,15 @@ export default function ActionButton(props: ActionButtonProps) {
     );
   }
 
-  const { className, fullWidth, icon, layout = 'inline', children, type, ...buttonProps } = props as ButtonLikeProps;
+  const {
+    className,
+    fullWidth,
+    icon,
+    layout = 'inline',
+    children,
+    type,
+    ...buttonProps
+  } = props as ButtonLikeProps;
   const classes = cn(baseStyles, layoutStyles[layout], fullWidth && 'w-full', className);
 
   return (

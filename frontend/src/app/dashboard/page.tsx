@@ -51,7 +51,9 @@ export default function DashboardPage() {
               key={stat.label}
               className="rounded-3xl bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white shadow-lg shadow-blue-500/30"
             >
-              <p className="text-sm font-semibold uppercase tracking-wide opacity-80">{stat.label}</p>
+              <p className="text-sm font-semibold uppercase tracking-wide opacity-80">
+                {stat.label}
+              </p>
               <p className="mt-4 text-4xl font-bold">{stat.value}</p>
               <p className="mt-3 text-sm opacity-80">{stat.description}</p>
             </div>
@@ -61,12 +63,17 @@ export default function DashboardPage() {
         <section className="space-y-6">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">Recent Lessons</h2>
+              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+                Recent Lessons
+              </h2>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 Pick up the most recent uploads or jump into a different chapter.
               </p>
             </div>
-            <Link href="/lessons" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
+            <Link
+              href="/lessons"
+              className="text-sm font-semibold text-indigo-600 dark:text-indigo-400"
+            >
               View all →
             </Link>
           </div>

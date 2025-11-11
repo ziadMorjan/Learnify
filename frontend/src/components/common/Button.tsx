@@ -25,7 +25,9 @@ export default function Button({
 
   return (
     <button className={cn(base, variants[variant], className)} disabled={loading} {...props}>
-      {loading ? <span className="rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" /> : null}
+      {loading ? (
+        <span className="rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+      ) : null}
       {children}
     </button>
   );
