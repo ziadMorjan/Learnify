@@ -25,7 +25,7 @@ export default function LessonCard({
   return (
     <article
       className={cn(
-        'flex h-full flex-col rounded-2xl border border-zinc-100 bg-white p-6 shadow-lg shadow-zinc-200/60 transition hover:-translate-y-0.5 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-black/30',
+        'flex h-full flex-col rounded-2xl border border-zinc-100 bg-white p-6 shadow-lg shadow-zinc-200/60 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-black/30',
         className
       )}
     >

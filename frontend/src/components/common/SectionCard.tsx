@@ -25,7 +25,7 @@ export default function SectionCard({
   return (
     <section
       className={cn(
-        'rounded-2xl border border-zinc-100 bg-white p-6 shadow-lg shadow-zinc-200/60 transition hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-black/30',
+        'rounded-2xl border border-zinc-100 bg-white p-6 shadow-lg shadow-zinc-200/60 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-black/30',
         className
       )}
     >

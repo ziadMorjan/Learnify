@@ -15,7 +15,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const base =
-    'inline-flex items-center justify-center rounded-lg font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50';
+    'inline-flex items-center justify-center rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50';
   const variants = {
     primary: 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:opacity-90',
     secondary: 'bg-zinc-800 text-white hover:bg-zinc-700 dark:bg-zinc-200 dark:text-black',
@@ -25,9 +25,7 @@ export default function Button({
 
   return (
     <button className={cn(base, variants[variant], className)} disabled={loading} {...props}>
-      {loading ? (
-        <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-white mr-2" />
-      ) : null}
+      {loading ? <span className="rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" /> : null}
       {children}
     </button>
   );

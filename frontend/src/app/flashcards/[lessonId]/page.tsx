@@ -76,7 +76,7 @@ export default function LessonFlashcardsPage() {
         <SectionCard contentClassName="flex flex-col items-center gap-8">
           <div
             onClick={handleFlip}
-            className={`flex h-72 w-full max-w-xl cursor-pointer items-center justify-center rounded-2xl border text-center text-lg font-semibold shadow-xl transition-all duration-500 ${
+            className={`flex h-72 w-full max-w-xl cursor-pointer items-center justify-center rounded-2xl border text-center text-lg font-semibold shadow-xl ${
               flipped
                 ? 'border-zinc-100 bg-white text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100'
                 : 'border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 text-white'
@@ -90,7 +90,7 @@ export default function LessonFlashcardsPage() {
           <div className="flex items-center gap-4">
             <button
               onClick={prevCard}
-              className="rounded-xl border border-zinc-200 px-5 py-2 text-sm font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800"
+              className="rounded-xl border border-zinc-200 px-5 py-2 text-sm font-semibold text-zinc-800 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800"
             >
               Previous
             </button>

@@ -20,7 +20,7 @@ type ButtonLikeProps = BaseProps & ButtonElementProps & { href?: undefined };
 type ActionButtonProps = LinkLikeProps | ButtonLikeProps;
 
 const baseStyles =
-  'inline-flex gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:translate-y-0.5 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-zinc-900 disabled:cursor-not-allowed disabled:opacity-60';
+  'inline-flex gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 hover:translate-y-0.5 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-zinc-900 disabled:cursor-not-allowed disabled:opacity-60';
 
 const layoutStyles: Record<NonNullable<BaseProps['layout']>, string> = {
   inline: 'items-center justify-center',
@@ -58,4 +58,3 @@ export default function ActionButton(props: ActionButtonProps) {
     </button>
   );
 }
-

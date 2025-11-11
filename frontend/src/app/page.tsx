@@ -32,13 +32,13 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/login"
-            className="w-40 text-center rounded-lg bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white py-3 font-medium shadow hover:opacity-90 transition"
+            className="w-40 text-center rounded-lg bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white py-3 font-medium shadow hover:opacity-90"
           >
             Login
           </Link>
           <Link
             href="/register"
-            className="w-40 text-center rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 py-3 font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+            className="w-40 text-center rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 py-3 font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800"
           >
             Get Started
           </Link>

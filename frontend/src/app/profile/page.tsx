@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import SectionCard from '@/components/common/SectionCard';
 import ActionButton from '@/components/common/ActionButton';
+import { useTheme } from '@/components/theme/ThemeProvider';
 
 interface UserProfile {
   name: string;
@@ -22,6 +23,7 @@ export default function ProfilePage() {
     bio: 'Software engineering student passionate about AI-powered education.',
     progress: 72,
   });
+  const { theme } = useTheme();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -51,6 +53,20 @@ export default function ProfilePage() {
               <p className="text-xs uppercase tracking-wide text-indigo-500">
                 {user.progress}% course completion
               </p>
+              <span
+                className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
+                  theme === 'dark'
+                    ? 'bg-indigo-500/10 text-indigo-200'
+                    : 'bg-indigo-50 text-indigo-600'
+                }`}
+              >
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    theme === 'dark' ? 'bg-indigo-300' : 'bg-indigo-500'
+                  }`}
+                />
+                {theme === 'dark' ? 'Dark mode active' : 'Light mode active'}
+              </span>
             </div>
           </div>
         </SectionCard>
@@ -134,7 +150,7 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="w-full rounded-xl border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                  className="w-full rounded-xl border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800"
                 >
                   Discard
                 </button>

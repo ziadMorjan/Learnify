@@ -5,12 +5,13 @@ import Layout from '@/components/layout/Layout';
 import SectionCard from '@/components/common/SectionCard';
 import ActionButton from '@/components/common/ActionButton';
 import Link from 'next/link';
+import { useTheme } from '@/components/theme/ThemeProvider';
 
 export default function SettingsPage() {
-  const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [language, setLanguage] = useState('en');
   const [twoFactor, setTwoFactor] = useState(false);
+  const { theme, toggleTheme, syncWithSystem } = useTheme();
 
   const handleSave = () => {
     alert('Settings saved successfully!');
@@ -31,11 +32,18 @@ export default function SettingsPage() {
               </div>
               <input
                 type="checkbox"
-                checked={darkMode}
-                onChange={() => setDarkMode((prev) => !prev)}
+                checked={theme === 'dark'}
+                onChange={toggleTheme}
                 className="h-5 w-5 accent-indigo-600"
               />
             </label>
+            <button
+              type="button"
+              onClick={syncWithSystem}
+              className="w-full rounded-2xl border border-dashed border-indigo-200 px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 dark:border-indigo-900/60 dark:text-indigo-300 dark:hover:bg-indigo-500/10"
+            >
+              Match system preference
+            </button>
 
             <label className="flex items-center justify-between rounded-2xl border border-zinc-100 px-4 py-3 dark:border-zinc-800">
               <div>
@@ -96,14 +104,14 @@ export default function SettingsPage() {
 
             <Link
               href="/settings/change-password"
-              className="block w-full rounded-2xl border border-zinc-200 px-4 py-3 text-center text-sm font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800"
+              className="block w-full rounded-2xl border border-zinc-200 px-4 py-3 text-center text-sm font-semibold text-zinc-800 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800"
             >
               Change password
             </Link>
 
             <button
               onClick={() => alert('Account deletion coming soon.')}
-              className="w-full rounded-2xl border border-red-300 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/30"
+              className="w-full rounded-2xl border border-red-300 px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/30"
             >
               Delete account
             </button>

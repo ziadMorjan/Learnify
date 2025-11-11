@@ -77,7 +77,7 @@ export default function LessonsPage() {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed px-8 py-14 text-center transition ${
+            className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed px-8 py-14 text-center ${
               isDragging
                 ? 'border-indigo-500 bg-indigo-50 dark:border-indigo-300 dark:bg-indigo-950/30'
                 : 'border-zinc-300 dark:border-zinc-700 hover:border-indigo-400 dark:hover:border-indigo-500'
@@ -132,13 +132,13 @@ export default function LessonsPage() {
                       View Lesson
                     </ActionButton>
                     <div className="grid grid-cols-3 gap-2">
-                      <button className="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800">
+                      <button className="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800">
                         Summaries
                       </button>
-                      <button className="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800">
+                      <button className="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800">
                         Download
                       </button>
-                      <button className="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800">
+                      <button className="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800">
                         Share
                       </button>
                     </div>
