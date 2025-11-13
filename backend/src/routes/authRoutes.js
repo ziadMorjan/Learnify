@@ -23,6 +23,6 @@ router.post('/login', loginValidator, validateRequest, loginUser);
 router.get('/logout', protect, logoutUser);
 router.get('/me', protect, getMe);
 router.post('/forgot-password', forgotPasswordValidator, validateRequest, forgotPassword);
-router.post('/reset-password/:token', resetPasswordValidator, validateRequest, resetPassword);
+router.patch('/reset-password/:token', resetPasswordValidator, validateRequest, resetPassword);
 
 export default router;

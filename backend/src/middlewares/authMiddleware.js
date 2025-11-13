@@ -9,10 +9,6 @@ export const protect = async (req, res, next) => {
     token = req.cookies.token;
   }
 
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-    [, token] = req.headers.authorization.split(' ');
-  }
-
   if (!token) {
     return next(new CustomError('Not authorized, token missing', 401));
   }
@@ -24,6 +20,8 @@ export const protect = async (req, res, next) => {
     if (!user) {
       return next(new CustomError('Not authorized, user not found', 401));
     }
+    if (user.passwordChangedAt && Date.parse(user.passwordChangedAt) > decoded.iat * 1000)
+      return next(new CustomError('You changed your password recently, please login again.', 401));
 
     req.user = user;
     next();

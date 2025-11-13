@@ -2,15 +2,18 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-  password: { type: String, required: true, minlength: 6, select: false },
-  avatar: { type: String, default: '' },
-  createdAt: { type: Date, default: Date.now },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-});
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    password: { type: String, required: true, minlength: 6, select: false },
+    avatar: { type: String, default: '' },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
+    passwordChangedAt: Date,
+  },
+  { timestamps: true }
+);
 
 userSchema.pre('save', async function hashPassword(next) {
   if (!this.isModified('password')) {
@@ -24,12 +27,6 @@ userSchema.pre('save', async function hashPassword(next) {
 
 userSchema.methods.comparePassword = async function comparePassword(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
-};
-
-userSchema.methods.getSignedJwtToken = function getSignedJwtToken() {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-  });
 };
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);

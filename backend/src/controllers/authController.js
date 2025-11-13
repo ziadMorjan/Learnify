@@ -49,7 +49,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return respond(res, 200, 'Password reset instructions sent if email exists');
+    throw new CustomError('No user with this email exist', 404);
   }
 
   const resetToken = crypto.randomBytes(20).toString('hex');
@@ -59,11 +59,15 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   await user.save({ validateBeforeSave: false });
 
   const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:3000'}/reset-password/${resetToken}`;
-  await sendEmail({
-    to: user.email,
-    subject: 'Learnify password reset',
-    html: `<p>Hi ${user.name},</p><p>Click the link below to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
-  });
+  try {
+    await sendEmail({
+      to: user.email,
+      subject: 'Learnify password reset',
+      html: `<p>Hi ${user.name},</p><p>Click the link below to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
+    });
+  } catch (error) {
+    throw new CustomError('There is an error with sending email', 500);
+  }
 
   respond(res, 200, 'Password reset instructions sent');
 });
@@ -83,6 +87,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
   }
 
   user.password = password;
+  user.passwordChangedAt = Date.now();
   user.resetPasswordToken = undefined;
   user.resetPasswordExpire = undefined;
   await user.save();
