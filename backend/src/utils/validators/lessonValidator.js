@@ -31,10 +31,6 @@ export const uploadLessonValidator = [
     .withMessage('Title cannot be empty'),
 ];
 
-export const getLessonValidator = [
-  param('id').isMongoId().withMessage('Invalid lesson id'),
-];
+export const getLessonValidator = [param('id').isMongoId().withMessage('Invalid lesson id')];
 
-export const deleteLessonValidator = [
-  param('id').isMongoId().withMessage('Invalid lesson id'),
-];
+export const deleteLessonValidator = [param('id').isMongoId().withMessage('Invalid lesson id')];
