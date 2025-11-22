@@ -19,7 +19,7 @@ const router = express.Router();
 
 const upload = multer({
   dest: os.tmpdir(),
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 1 * 1024 * 1024 },
 });
 
 router.use(protect);

@@ -5,7 +5,7 @@ const allowedMimeTypes = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'text/plain',
 ];
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1 MB
 
 export const uploadLessonValidator = [
   body('file').custom((value, { req }) => {
@@ -18,7 +18,7 @@ export const uploadLessonValidator = [
     }
 
     if (req.file.size > MAX_FILE_SIZE) {
-      throw new Error('File must be 10MB or smaller');
+      throw new Error('File must be 1MB or smaller');
     }
 
     return true;

@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import lessonRoutes from './routes/lessonRoutes.js';
+import flashcardRoutes from './routes/flashcardRoutes.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import CustomError from './utils/CustomError.js';
 
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/lessons', lessonRoutes);
+app.use('/api/v1/flashcards', flashcardRoutes);
 
 app.use((req, res, next) => {
   next(new CustomError(`Can't find ${req.originalUrl} on this server`, 404));
